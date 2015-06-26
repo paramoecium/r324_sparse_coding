@@ -8,8 +8,29 @@ import numpy as np
 from utils import *
 from sklearn.decomposition import DictionaryLearning
 
+SENSOR_DICT = {
+	# PIR, 34 index is always broken and not provide any info
+	'PIR': (1, 4, 13, 16, 18, 26, 31, 32, 37, 38, 39, 40),
+	'Temp': (2, 5, 7, 14, 19, 27, 35),
+	'Humi': (3, 6, 8, 15, 20, 28, 36),
+	'Light': (9, 11, 22, 23, 41),
+	'Sound': (10, 12, 24, 25, 29, 30, 42, 43, 44),
+	'Magnet': (17, 21, 33),
+	'WallBtn': (45,46,47,48),
+}
+DATATYPE_DICT = { # 0 means discrete, 1 means continuous
+	'PIR': 0,
+	'Temp': 1,
+	'Humi': 1,
+	'Light': 1,
+	'Sound': 1,
+	'Magnet': 1,
+	'WallBtn': 0,
+}
+
 def sparse_coding(dimension, input_x, out_dir):
-	dl = DictionaryLearning(dimension)
+	#dl = DictionaryLearning(dimension)
+	dl = DictionaryLearning(dimension, 1, 100, 10) 
 	dl.fit(input_x)
 	code = sparse_encode(input_x, dl.components_)
 
@@ -34,7 +55,8 @@ def run(dimension,raw_data_dir,out_dir):
 	for filename in filenames:
 		path = '{}/{}'.format(raw_data_dir, filename)
 		with Timer('open {} with ALL sensors'.format(filename)):
-			data = np.genfromtxt(path, usecols=range(1,45)
+			#data = np.genfromtxt(path, usecols=range(1,49)
+			data = np.genfromtxt(path, usecols=[1, 4, 13, 16, 18, 26, 31, 32, 37, 38, 39, 40, 9, 11, 22, 23, 41, 10, 12, 24, 25, 29, 30, 42, 43, 44]
 				, delimiter=',').tolist()
 			print "# of data:", len(data)
 			sensor_data.extend(data)
