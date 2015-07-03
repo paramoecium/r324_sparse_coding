@@ -28,25 +28,16 @@ DATATYPE_DICT = { # 0 means discrete, 1 means continuous
 	'WallBtn': 0,
 }
 
-def sparse_coding(dimension, input_x, out_dir):
+def sparse_coding(dimension, input_x, alpha, iteration, tolerance):
 	#dl = DictionaryLearning(dimension)
-	dl = DictionaryLearning(dimension, 1, 100, 10) 
+	dl = DictionaryLearning(dimension, alpha, iteration, tolerance) 
 	dl.fit(input_x)
-	code = sparse_encode(input_x, dl.components_)
-
-	np.set_printoptions(precision=3, suppress=True)
-	print code
-	print dl.components_
+	#np.set_printoptions(precision=3, suppress=True)
+	#print code
+	#print dl.components_
 	print "error:", dl.error_[-1]
-	with open('{}/atoms'.format(out_dir), "w") as op:
-		for component in dl.components_:
-			line = ', '.join(str(e) for e in component)
-        		op.write( line + '\n')
-	with open('{}/codes'.format(out_dir), "w") as op:
-		for coefficient in code:
-			line = ', '.join(str(e) for e in coefficient)
-        		op.write( line + '\n')
-
+	
+	return dl
 
 def run(dimension,raw_data_dir,out_dir):
 	with open('{}/filename.list'.format(raw_data_dir), 'r') as fp:
@@ -62,7 +53,19 @@ def run(dimension,raw_data_dir,out_dir):
 			sensor_data.extend(data)
 	with Timer('Sparse Coding...'):
 		print "# of ALL data as a whole:", len(sensor_data)
-		sparse_coding(dimension, sensor_data,out_dir)
+		dl = sparse_coding(dimension, sensor_data,out_dir, 1, 10000, 0.00001)
+	with open('{}/atoms'.format(out_dir), "w") as op:
+		for component in dl.components_:
+			line = ', '.join(str(e) for e in component)
+        		op.write( line + '\n')
+
+	code = sparse_encode(input_x, dl.components_)
+
+	with open('{}/codes'.format(out_dir), "w") as op:
+		for coefficient in code:
+			line = ', '.join(str(e) for e in coefficient)
+        		op.write( line + '\n')	
+
 	with open('{}/filename.list'.format(raw_data_dir), 'r') as fp:
 		filenames = fp.read().splitlines()
   

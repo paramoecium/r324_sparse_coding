@@ -1,0 +1,4 @@
+python wordConstruction_sparseCoding_readWekaFormat_cache.py 2015-05-15 S
+python DPGMM_wordConstruction.py allSound_0515_SparseCodingDimension3_weka.cache hdp_output/
+python myPlotTopicProportion.py hdp_output/ figure/
+
