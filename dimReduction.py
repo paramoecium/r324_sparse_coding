@@ -1,9 +1,6 @@
 import numpy as np 
-from matplotlib.mlab import PCA as mlabPCA
 import datetime
 import time
-from sklearn import mixture
-import sys
 import argparse
 
 import gc # garbage collection
@@ -21,7 +18,12 @@ def writeCache(outputFilename, data):
         for line in data_str:
             line_write = ' '.join(line) + '\n'
             f1.write(line_write)
-
+def writeTimestamp(outputFilename, timestampData):
+    print 'Writing timestamp: ', outputFilename 
+    with open(outputFilename, 'w') as f1:
+        data_str = timestampData.astype(np.str)
+        for line in data_str:
+            f1.write(line+'\n')
 def getIO(sensorStr, baseName):
     ## sensorsStr: 'SPL' (in order)
     sensors = []
@@ -57,10 +59,15 @@ def getBasename(name):
 if __name__=='__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('wekaFilePath', type=str, help='wekaFilePath, eg:merge-2014-09-01to2014-09-07.dat')
+    argparser.add_argument('dimReductionType', type=str, help='types of dimensionality reduction, [SC/PCA]')
+    argparser.add_argument('reducedDimension', type=int, help='reducedDimension, integer, eg: 3')
     argparser.add_argument('specifiedSensors', type=str, help='specifiedSensors, eg: SPL')
     args = argparser.parse_args()
     args = vars(args)
-    print 'Start: word costruction'
+    print '\
+####################################\n\
+#         word construction        #\n\
+####################################'
     ## Input: raw data; weka format
     ## Output: .PCAcache
     ####################################
@@ -68,60 +75,63 @@ if __name__=='__main__':
     ####################################
     ## parameter setting
     wekaFilePath = args['wekaFilePath']
-
-    ## Sparse Codings parameters:
-    reducedDimension = 3
-    baseName = getBasename(wekaFilePath)
-    baseName = baseName + '_SparseCodingDimension{0}_weka.cache'.format(reducedDimension) 
+    reducedDimension = args['reducedDimension']
+    baseName = getBasename(wekaFilePath) + '_SparseCodingDimension{0}_weka.cache'.format(reducedDimension) 
 
     ####################################
     # Input argument: i.e. "SPL"
     specifiedSensors = args['specifiedSensors']
     ####################################
-    allsensors, outputFile = getIO(specifiedSensors, baseName)
+    sensorIDs, outputFilename = getIO(specifiedSensors, baseName)
 
     ####################################
     # Load weka format
     ####################################
     ## loading data, return numpy array
-    dataArray, t = load_weikaFormat(wekaFilePath, allsensors)
+    dataArray, t = load_weikaFormat(wekaFilePath, sensorIDs)
     ## convert the type: str to float
-    #bug: make sure no '?'
+    print "Warning: Please make sure there is no any '?' value in the data."
     dataArray = dataArray.astype(np.float)
     gc.collect()
-    
     ####################################
-    ## Dimension Reduction: Sparse Coding
+    #     Dimensionality Reduction     #
     ####################################
-    print 'Sparse Coding:'
-    # normalize every column respectively
-    from sklearn.preprocessing import MinMaxScaler
-    normalizer = MinMaxScaler() # feature range (0,1)
-    dataArray_normalized = normalizer.fit_transform(dataArray)
-    print dataArray_normalized
-    # reduce to the specified dimension
-    from learnDic import sparse_coding
-    from sklearn.decomposition import sparse_encode
-        
-    dl = sparse_coding(reducedDimension, dataArray_normalized, 0.2, 1000, 0.0001)
-    code = sparse_encode(dataArray_normalized, dl.components_)
-    data_reduced = code
-    print data_reduced
-    print dl.components_    
-    print 'iteration:', dl.n_iter_
-    '''
+    data_reduced = np.empty((0,0))
+    if 'SC' in args['dimReductionType']:
+        ####################################
+        #          Sparse Coding           #
+        ####################################
+        print 'Sparse Coding:'
+        # normalize every column respectively
+        from sklearn.preprocessing import MinMaxScaler
+        normalizer = MinMaxScaler() # feature range (0,1)
+        dataArray_normalized = normalizer.fit_transform(dataArray)
+        print dataArray_normalized
+        # reduce to the specified dimension
+        from learnDic import sparse_coding
+        from sklearn.decomposition import sparse_encode   
+        dl = sparse_coding(reducedDimension, dataArray_normalized, 0.2, 1000, 0.0001)
+        code = sparse_encode(dataArray_normalized, dl.components_)
+        data_reduced = code
+        print type(code)
+        print data_reduced
+        print dl.components_    
+        print 'iteration:', dl.n_iter_
+    elif 'SC' in args['dimReductionType']:
+        ####################################
+        #   Principal Component Analysis   #
+        ####################################
+        from matplotlib.mlab import PCA as mlabPCA
+        print 'PCA:'
+        myPCA = mlabPCA(dataArray)
+        data_reduced = myPCA.Y[:,0:reducedDimension]# reduce to the specified dimension
+        print dataArray
+        print data_reduced
     ####################################
-    ## Dimension Reduction: PCA
+	#  End of Dimensionality Reduction #
     ####################################
-    print 'PCA:'
-    myPCA = mlabPCA(dataArray)
-    data_reduced = myPCA.Y[:,0:reducedDimension]# reduce to the specified dimension
-    print dataArray
-    print data_reduced
-    ####################################
-	'''
-    ####################################
-    print 'data_reduced dimension: ', reducedDimension, data_reduced.shape
-    writeCache(outputFile, data_reduced)
-    print 'Output file: ', outputFile 
+    print 'data_reduced dimension:', reducedDimension, data_reduced.shape
+    writeCache(outputFilename, data_reduced)
+    writeTimestamp('./timestamp', t)
+    print 'Output file:', outputFilename 
     print 'Done'
