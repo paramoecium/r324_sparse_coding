@@ -1,15 +1,8 @@
-import numpy as np 
-from matplotlib.mlab import PCA as mlabPCA
+import numpy as np
 import datetime
 import time
 from sklearn import mixture
-import sys
 import gc # garbage collection
-#???
-#sys.path.append('../../../queryDataBase/')
-#from setting import *
-#from util_weka import load_weikaFormat
-
 import argparse
 from gensim import corpora, models, similarities
 from utils import *
@@ -93,10 +86,8 @@ def readCache(filename):
     print 'Read cache:'
     print 'Length: ', length
     columns = [i for i in range(length)]
-    t1 = time.time()
     data = np.loadtxt(open(filename, 'r'), delimiter=' ', skiprows=0, usecols=columns, dtype='object')
-    t2 = time.time(); print 'Time: ', (t2-t1), ' sec.'; print ''
-    return data
+    return data.astype(np.float)
 
 def getDimension(filename):
     # assume at most two digit PCA dimension 
@@ -197,7 +188,10 @@ if __name__=='__main__':
 	argparser.add_argument('out_dir', type=str, help='the file of output data')
 	args = argparser.parse_args()
 
-	print 'Start: DPGMM'
+	print '\
+####################################\n\
+#              DPGMM               #\n\
+####################################'
 	## DPGMM parameters:
 	#n = 100
 	n = 10
@@ -205,7 +199,7 @@ if __name__=='__main__':
 	####################################
 	'''
 	Input
-		.PCAcache file
+		.cache file
 	Output
 		.documents
 	'''
@@ -215,15 +209,16 @@ if __name__=='__main__':
 	reducedDimension = getDimension(readfilename)
 	baseName = 'alpha{0}_{1}clusters_SparseCodingDimension{2}_5weka.documents'.format(a, n, reducedDimension)
 	addName = getSensorName(readfilename)
-	outputFile = addName + baseName 
+	outputFile = addName + baseName
 	####################################
+	print 'Reading...'
 	data_reduced = readCache(readfilename)
-	data_reduced = data_reduced.astype(np.float)
+	#for sparse coding only in case that DPGMM doesn't split data apart        
 	for v in range(len(data_reduced)):
 		for i in range(len(data_reduced[0])):
 			data_reduced[v][i] = data_reduced[v][i]*10
 	print data_reduced
-	print 'DPGMM:'
+	print 'DPGMM...'
 	## DPGMM learning
 	t1 = time.time()
 	dataDimension = len(data_reduced[0,:])
@@ -245,7 +240,7 @@ if __name__=='__main__':
 	with open('GOO'.format(out_dir), 'w') as op:
 		for l in data_reduced:
 			print >> op, l
-	t2 = time.time(); print 'Time: ', (t2-t1), ' sec.'; print''
+	t2 = time.time(); print 'Time: ', (t2-t1), ' sec.'; print ''
 	####################################
 	## construct word vector and word ID
 	####################################
@@ -263,29 +258,29 @@ if __name__=='__main__':
 			wordsID[hash_key] = wordIndex
 			wordIndex = wordIndex + 1
 		wordID_list.append(wordsID[hash_key])
-	t2 = time.time()
+	t2 = time.time(); print 'Time: ', (t2-t1), ' sec.';
 	gc.collect()
 	numberOfWordType = wordIndex
-	print 'Time', (t2-t1), ' sec.'
-	print 'Total different word: ' + str(wordIndex)
+	print 'Vocabulary size: ' + str(wordIndex)
 	print 'wordID length: ' + str(len(wordsID)) 
 	print ''
 
-
-
-
+	print '\
+####################################\n\
+#                HDP               #\n\
+####################################'
 	####################################
 	##     Chang's hdp alternative     #
 	####################################
 	window_x_arr = window(data_reduced)
-
 	## Do HDP here
+	print 'HDP...'
 	topic_num = hdp_topic(window_x_arr, out_dir)
-
 	# import pdb; pdb.set_trace()
 	## Print original sensor data in windows
 	with open('{}/sensor'.format(out_dir), 'w') as op, Timer('write file {}'.format(out_dir)):
 		for line in window_x_arr:
+			print line
 			out_arr = list()
 			for i,v in enumerate(line):
 				if v != 0 and not np.isnan(v):
@@ -293,7 +288,12 @@ if __name__=='__main__':
 
 			print >> op, len(out_arr), " ".join(out_arr)
 	## Print parameters... date and window size
-	filenames = ["2015-05-15"]
+	filenames = []
+	with open('timestamp', 'r') as fp:
+		for line in fp:
+			t_str = datetime.datetime.fromtimestamp(float(line)).strftime('%Y-%m-%d')
+			if len(filenames) == 0 or filenames[-1] != t_str:
+				filenames.append(t_str)
 	with open('{}/settings'.format(out_dir), 'w') as op:
 		print >> op, WINDOW_SIZE
 		print >> op, topic_num
