@@ -117,7 +117,7 @@ if __name__=='__main__':
         print data_reduced
         print dl.components_    
         print 'iteration:', dl.n_iter_
-    elif 'SC' in args['dimReductionType']:
+    elif 'PCA' in args['dimReductionType']:
         ####################################
         #   Principal Component Analysis   #
         ####################################
