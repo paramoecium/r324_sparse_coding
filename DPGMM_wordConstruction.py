@@ -207,17 +207,21 @@ if __name__=='__main__':
 	out_dir = args.out_dir
 
 	reducedDimension = getDimension(readfilename)
-	baseName = 'alpha{0}_{1}clusters_SparseCodingDimension{2}_5weka.documents'.format(a, n, reducedDimension)
+	if 'SparseCoding' in readfilename:
+		baseName = 'alpha{0}_{1}clusters_SparseCoding_Dimension{2}_5weka.documents'.format(a, n, reducedDimension)
+	elif 'PCA' in readfilename:
+		baseName = 'alpha{0}_{1}clusters_PCA_Dimension{2}_5weka.documents'.format(a, n, reducedDimension)
 	addName = getSensorName(readfilename)
 	outputFile = addName + baseName
 	####################################
 	print 'Reading...'
 	data_reduced = readCache(readfilename)
-	#for sparse coding only in case that DPGMM doesn't split data apart        
-	for v in range(len(data_reduced)):
-		for i in range(len(data_reduced[0])):
-			data_reduced[v][i] = data_reduced[v][i]*10
-	print data_reduced
+	#for sparse coding only in case that DPGMM doesn't split data apart	
+	if 'SparseCoding' in readfilename:       
+		for v in range(len(data_reduced)):
+			for i in range(len(data_reduced[0])):
+				data_reduced[v][i] = data_reduced[v][i]*10
+		print data_reduced
 	print 'DPGMM...'
 	## DPGMM learning
 	t1 = time.time()
@@ -236,10 +240,8 @@ if __name__=='__main__':
 
 	levelRepresentation = tuple(levelRepresentation)
 	data_reduced = np.hstack(levelRepresentation)
+	print 'Dicretized data:'
 	print data_reduced
-	with open('GOO'.format(out_dir), 'w') as op:
-		for l in data_reduced:
-			print >> op, l
 	t2 = time.time(); print 'Time: ', (t2-t1), ' sec.'; print ''
 	####################################
 	## construct word vector and word ID

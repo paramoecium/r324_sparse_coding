@@ -1,4 +1,4 @@
-python dimReduction.pyH 2015-05-15 SC 3 S
+python dimReduction.py merge-2014-09-01to2015-01-31.dat PCA 3 SPL
 python DPGMM_wordConstruction.py allSound_0515_SparseCodingDimension3_weka.cache hdp_output/
 python myPlotTopicProportion.py hdp_output/ figure/
 

@@ -76,8 +76,12 @@ if __name__=='__main__':
     ## parameter setting
     wekaFilePath = args['wekaFilePath']
     reducedDimension = args['reducedDimension']
-    baseName = getBasename(wekaFilePath) + '_SparseCodingDimension{0}_weka.cache'.format(reducedDimension) 
-
+    if 'SC' in args['dimReductionType']:
+        baseName = getBasename(wekaFilePath) + '_SparseCoding_Dimension{0}_weka.cache'.format(reducedDimension) 
+    elif 'PCA' in args['dimReductionType']:
+        baseName = getBasename(wekaFilePath) + '_PCA_Dimension{0}_weka.cache'.format(reducedDimension) 
+    else:
+        print 'Error: No Reduction Method Specified!!!' 
     ####################################
     # Input argument: i.e. "SPL"
     specifiedSensors = args['specifiedSensors']
@@ -125,12 +129,16 @@ if __name__=='__main__':
         print 'PCA:'
         myPCA = mlabPCA(dataArray)
         data_reduced = myPCA.Y[:,0:reducedDimension]# reduce to the specified dimension
+        print 'Raw data:'
         print dataArray
+        print 'Reduced data:'
         print data_reduced
+    else:
+        print 'Error: No Reduction Method Specified!!!' 
     ####################################
 	#  End of Dimensionality Reduction #
     ####################################
-    print 'data_reduced dimension:', reducedDimension, data_reduced.shape
+    print 'data_reduced dimension:', data_reduced.shape
     writeCache(outputFilename, data_reduced)
     writeTimestamp('./timestamp', t)
     print 'Output file:', outputFilename 
