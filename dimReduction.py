@@ -110,15 +110,17 @@ if __name__=='__main__':
         from sklearn.preprocessing import MinMaxScaler
         normalizer = MinMaxScaler() # feature range (0,1)
         dataArray_normalized = normalizer.fit_transform(dataArray)
+        print 'normalized data:'
         print dataArray_normalized
         # reduce to the specified dimension
         from learnDic import sparse_coding
         from sklearn.decomposition import sparse_encode   
-        dl = sparse_coding(reducedDimension, dataArray_normalized, 0.2, 1000, 0.0001)
+        dl = sparse_coding(reducedDimension, dataArray_normalized, 0.2*(len(dataArray_normalized)/86400), 1000, 0.0001)
         code = sparse_encode(dataArray_normalized, dl.components_)
         data_reduced = code
-        print type(code)
+        print 'Reduced data:'
         print data_reduced
+        print 'Dictionary:'
         print dl.components_    
         print 'iteration:', dl.n_iter_
     elif 'PCA' in args['dimReductionType']:

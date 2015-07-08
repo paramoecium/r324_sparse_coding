@@ -1,6 +1,8 @@
 import datetime
 import time
-
+import argparse
+import numpy as np
+import shutil
 import MySQLdb
 HOST = 'gardenia.csie.ntu.edu.tw'
 USER = 'yuchentsai'
@@ -73,8 +75,8 @@ FEATURE_MAPPING = {
 }
 
 
-def to_file(file_name, data):
-    file = open(file_name, 'wb')
+def to_file(in_dir,file_name, data):
+    file = open('{}/{}'.format(in_dir,file_name), 'wb')
     vector = ['?'] * FEATURE_LENGTH
     template = ', '.join(['{}'] * FEATURE_LENGTH) + '\n'
     reference = 0
@@ -96,9 +98,10 @@ def to_file(file_name, data):
             print 'Exception: ', node_id, '; ' ,name, '; ', index, '; ', value
             pass
     file.close()
+    print 'Write "{}"'.format(file_name)
 
 
-def downLoad():
+def downLoad(in_dir):
     # database connection
     db = MySQLdb.connect(HOST, USER, PASSWORD, DATABASE)
 
@@ -121,15 +124,49 @@ def downLoad():
         cursor.execute(sql)
         results = cursor.fetchall()
         filename = time_cursor.strftime('%Y-%m-%d')
-        to_file(filename, results)
+        to_file(in_dir,filename, results)
         time_lists.append(filename)
 
         time_cursor += time_delta
     db.close()
 
-    with open("filename.list", "w") as op:
+    with open('{}/{}'.format(in_dir,"filename.list"), "w") as op:
         op.write("\n".join(time_lists))
+
+def check(index, vector):
+	# import pdb; pdb.set_trace()
+	for i, v in enumerate(vector[:45]):
+		if np.isnan(v):
+			print 'missing value in line', index, ', attr ', i
+
+def smooth(x):
+	for i, line in enumerate(x):
+		for i2, v2 in enumerate(line[:45]):
+			if np.isnan(v2):
+				print 'missing value in line', i, ', attr ', i2
+				x[i][i2] = x[i-1][i2]
 
 
 if __name__ == '__main__':
-    downLoad()
+	argparser = argparse.ArgumentParser()
+	argparser.add_argument('dir', type=str, help='the dir to save raw data')
+	args = argparser.parse_args()
+	args = vars(args)
+
+
+	in_dir = args['dir']
+
+	downLoad(in_dir)
+	with open('{}/filename.list'.format(in_dir), 'r') as fp:
+		filenames = fp.read().splitlines()
+
+	with open('{}/filename.list'.format(in_dir), 'r') as fp:
+		filenames = fp.read().splitlines()
+	with open('{}/{}'.format(in_dir,'merge_'+BEGIN+'_to_'+END), 'w') as op:
+		for file in filenames:
+			x = np.genfromtxt('{}/{}'.format(in_dir,file), delimiter=',')
+			smooth(x)
+			x = x.astype('str')
+			for line in x:
+				print >> op, ", ".join(line)
+	print 'Write "{}"'.format('merge_'+BEGIN+'_to_'+END)

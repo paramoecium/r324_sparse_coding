@@ -8,7 +8,7 @@ from gensim import corpora, models, similarities
 from utils import *
 import math
 
-WINDOW_SIZE = 1 # mins
+WINDOW_SIZE = 5 # mins
 
 # time conversion
 _d = lambda t: datetime.datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
@@ -221,7 +221,7 @@ if __name__=='__main__':
 		for v in range(len(data_reduced)):
 			for i in range(len(data_reduced[0])):
 				data_reduced[v][i] = data_reduced[v][i]*10
-		print data_reduced
+		#print data_reduced
 	print 'DPGMM...'
 	## DPGMM learning
 	t1 = time.time()
@@ -282,7 +282,6 @@ if __name__=='__main__':
 	## Print original sensor data in windows
 	with open('{}/sensor'.format(out_dir), 'w') as op, Timer('write file {}'.format(out_dir)):
 		for line in window_x_arr:
-			print line
 			out_arr = list()
 			for i,v in enumerate(line):
 				if v != 0 and not np.isnan(v):
@@ -293,7 +292,7 @@ if __name__=='__main__':
 	filenames = []
 	with open('timestamp', 'r') as fp:
 		for line in fp:
-			t_str = datetime.datetime.fromtimestamp(float(line)).strftime('%Y-%m-%d')
+			t_str = datetime.fromtimestamp(float(line)).strftime('%Y-%m-%d')
 			if len(filenames) == 0 or filenames[-1] != t_str:
 				filenames.append(t_str)
 	with open('{}/settings'.format(out_dir), 'w') as op:
