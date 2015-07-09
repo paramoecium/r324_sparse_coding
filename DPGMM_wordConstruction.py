@@ -291,7 +291,7 @@ if __name__=='__main__':
 			print >> op, len(out_arr), " ".join(out_arr)
 	## Print parameters... date and window size
 	filenames = []
-	with open(args['timestamp_filename'], 'r') as fp:
+	with open(args.timestamp_filename, 'r') as fp:
 		for line in fp:
 			t_str = datetime.fromtimestamp(float(line)).strftime('%Y-%m-%d')
 			if len(filenames) == 0 or filenames[-1] != t_str:
