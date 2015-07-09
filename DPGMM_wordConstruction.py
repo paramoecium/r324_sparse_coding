@@ -238,7 +238,7 @@ if __name__=='__main__':
 		y = g.predict(x)
 		levelRepresentation.append(y.reshape(-1,1))
 		gc.collect()
-
+	print 'DPGMM parameters:'g.get_params()
 	levelRepresentation = tuple(levelRepresentation)
 	data_reduced = np.hstack(levelRepresentation)
 	print 'Dicretized data:'
