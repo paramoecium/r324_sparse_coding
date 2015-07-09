@@ -62,6 +62,7 @@ if __name__=='__main__':
     argparser.add_argument('dimReductionType', type=str, help='types of dimensionality reduction, [SC/PCA]')
     argparser.add_argument('reducedDimension', type=int, help='reducedDimension, integer, eg: 3')
     argparser.add_argument('specifiedSensors', type=str, help='specifiedSensors, eg: SPL')
+    argparser.add_argument('outputDir', type=str, help='output directory')
     args = argparser.parse_args()
     args = vars(args)
     print '\
@@ -141,7 +142,7 @@ if __name__=='__main__':
 	#  End of Dimensionality Reduction #
     ####################################
     print 'data_reduced dimension:', data_reduced.shape
-    writeCache(outputFilename, data_reduced)
-    writeTimestamp('./timestamp', t)
+    writeCache(args['outputDir']+outputFilename, data_reduced)
+    writeTimestamp(args['outputDir']+'timestamp', t)
     print 'Output file:', outputFilename 
     print 'Done'
