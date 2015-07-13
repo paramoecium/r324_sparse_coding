@@ -11,5 +11,6 @@ do
 		python ${codeDir}dimReduction.py $rawData $ReductionType $dim SPL ./
 		mkdir hdp_output_${ReductionType}_dim_${dim}
 		python ${codeDir}DPGMM_wordConstruction.py ${baseName}${ReductionType}_Dimension${dim}_weka.cache timestamp hdp_output_${ReductionType}_dim_${dim}/
+		python evaluate.py hdp_output_${ReductionType}_dim_${dim}/hdp_topic truth_data-2014-11-02_to_2014-11-03.txt
 	done
 done
