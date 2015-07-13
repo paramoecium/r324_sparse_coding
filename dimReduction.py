@@ -78,7 +78,7 @@ if __name__=='__main__':
     wekaFilePath = args['wekaFilePath']
     reducedDimension = args['reducedDimension']
     if 'SC' in args['dimReductionType']:
-        baseName = getBasename(wekaFilePath) + '_SparseCoding_Dimension{0}_weka.cache'.format(reducedDimension) 
+        baseName = getBasename(wekaFilePath) + '_SC_Dimension{0}_weka.cache'.format(reducedDimension) 
     elif 'PCA' in args['dimReductionType']:
         baseName = getBasename(wekaFilePath) + '_PCA_Dimension{0}_weka.cache'.format(reducedDimension) 
     else:

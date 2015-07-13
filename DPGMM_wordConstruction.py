@@ -208,8 +208,8 @@ if __name__=='__main__':
 	out_dir = args.out_dir
 
 	reducedDimension = getDimension(readfilename)
-	if 'SparseCoding' in readfilename:
-		baseName = 'alpha{0}_{1}clusters_SparseCoding_Dimension{2}_5weka.documents'.format(a, n, reducedDimension)
+	if 'SC' in readfilename:
+		baseName = 'alpha{0}_{1}clusters_SC_Dimension{2}_5weka.documents'.format(a, n, reducedDimension)
 	elif 'PCA' in readfilename:
 		baseName = 'alpha{0}_{1}clusters_PCA_Dimension{2}_5weka.documents'.format(a, n, reducedDimension)
 	addName = getSensorName(readfilename)
