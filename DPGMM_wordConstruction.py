@@ -218,7 +218,7 @@ if __name__=='__main__':
 	print 'Reading...'
 	data_reduced = readCache(readfilename)
 	#for sparse coding only in case that DPGMM doesn't split data apart	
-	if 'SparseCoding' in readfilename:       
+	if 'SC' in readfilename:       
 		for v in range(len(data_reduced)):
 			for i in range(len(data_reduced[0])):
 				data_reduced[v][i] = data_reduced[v][i]*10
