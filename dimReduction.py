@@ -52,7 +52,7 @@ def getIO(sensorStr, baseName):
 
 def getBasename(name):
     # format: merge-year-month-daytoyear-month-day.dat
-    name = name.split('.')[0].split('-')
+    name = name.split('/')[-1].split('.')[0].split('-')
     name = ''.join(name[1:])
     return name
 
