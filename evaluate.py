@@ -30,7 +30,7 @@ if __name__=='__main__':
 			Y_train.append(label[ line[1] ])
 	#print Y_train
 	prob = svm_problem(Y_train, X_train)
-	param = svm_parameter('-v 12 -q')
+	param = svm_parameter('-v 5 -q')
 	model = svm_train(prob, param)
 	#print model
 	#svm_save_model('{}/svm_model'.format(args['outputDir']),model)
