@@ -34,21 +34,25 @@ def build_y(topics, topic_num):
 
 	return yy
 
-def run(data_dir, out_dir):
+def run(topic_file, setting_file, info, out_dir):
 
 	## Read settings
 	dates = list()
-	with open('{}/settings'.format(data_dir), 'r') as fp:
+	with open(setting_file, 'r') as fp:
 		window_size = int(fp.readline().strip())
-		topic_num = int(fp.readline().strip())
+		topic_num = int(fp.readline().strip())#wrong
 		for line in fp:
 			dates.append(line.strip())
-
+	## Read topic number
+	with open(info, 'r') as fp:
+		topic_num = int(fp.readlines()[-1].split(':')[-1])
+		for line in fp:
+			dates.append(line.strip())
 	## Get different colors
 	color = get_color_settings(topic_num)
 
 	## Get data
-	with open('{}/iter@00405.doc.states'.format(data_dir), 'r') as fp:
+	with open(topic_file, 'r') as fp:
 		topics = fp.read().split("\n")
 
 	yy_topics = build_y(topics, topic_num)
@@ -135,14 +139,16 @@ def run(data_dir, out_dir):
 
 def main():
 	argparser = argparse.ArgumentParser()
-	argparser.add_argument('raw_data_dir', type=str, help='the directory of list')
+	argparser.add_argument('topic_data', type=str, help='the data of topic proportion')
+	argparser.add_argument('settings', type=str, help='settings')
+	argparser.add_argument('info', type=str, help='info')
 	argparser.add_argument('out_dir', type=str, help='the file of output data')
 	args = argparser.parse_args()
 	args = vars(args)
 
 	mkdir_p(args['out_dir'])
 
-	run(args['raw_data_dir'], args['out_dir'])
+	run(args['topic_data'], args['settings'], args['info'], args['out_dir'])
 
 if __name__ == '__main__':
 	main()

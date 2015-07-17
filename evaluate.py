@@ -16,12 +16,16 @@ if __name__=='__main__':
 	args = vars(args)
 
 	# with open(args.filePath, 'r') as fr:
-	topicNum, X_train = svm_read_problem(args['topicFilePath'])
+	# for SVM (LDA) input format	
+	#topicNum, X_train = svm_read_problem(args['topicFilePath'])
+	with open(args['topicFilePath'],'r') as fr:
+		X_train = fr.readlines()
+		X_train = [[float(num) for num in e.split()] for e in X_train]
 	X_train = X_train[1:] # abandon the first instance
 	#print X_train
 	Y_train = []
-	with open(args['labelFilePath'], 'r') as fp:
-		for line in fp:
+	with open(args['labelFilePath'], 'r') as fw:
+		for line in fw:
 			line = line.rstrip().split(';')
 			Y_train.append(label[ line[1] ])
 	#print Y_train
