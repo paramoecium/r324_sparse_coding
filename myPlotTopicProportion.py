@@ -27,12 +27,10 @@ def build_y(topics, topic_num):
 		tmp = t.split()
 		# 2, 1:0.2, 3:0.8
 		total = 0
-		for tt in tmp[1:]:
-			tmp2 = tt.split(':')
-			total += float(tmp2[1])
-		for tt in tmp[1:]:
-			tmp2 = tt.split(':')
-			yy[ind][int(tmp2[0])] = float(tmp2[1]) / total
+		for tt in tmp:
+			total += float(tt)
+		for topic_id, tt in enumerate(tmp):
+			yy[ind][topic_id] = float(tt) / total
 
 	return yy
 
@@ -50,7 +48,7 @@ def run(data_dir, out_dir):
 	color = get_color_settings(topic_num)
 
 	## Get data
-	with open('{}/hdp_topic'.format(data_dir), 'r') as fp:
+	with open('{}/iter@00405.doc.states'.format(data_dir), 'r') as fp:
 		topics = fp.read().split("\n")
 
 	yy_topics = build_y(topics, topic_num)

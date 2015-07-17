@@ -1,0 +1,115 @@
+# need to specify time and iteration and the program will be terminated by the either one's constraint!
+# suggestion: set etither one to be -1 (no constraint)
+
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents  --directory train_dir/allSound_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allSound_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+[time 30min, iter 1000]
+./hdp --verbose --max_iter 1000 --train_data sampleData/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult
+
+[time no limit, iter 1000]
+# sound, PIR, light
+./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+# sound, PIR
+./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+[0313,2015]
+./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+
+
+[3/3, 2015] 01:01 am.
+add codes at line 211 and line 217, main.cpp:
+hdp->save_doc_states(name);// added by Hans
+
+
+[3/30, 2015] 18:46 pm.(PCA3)
+(sound)
+time ./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allSound_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allSound_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR)
+time ./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allPIR_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allPIR_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Light)
+time ./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + Light)
+time ./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR + Light)
+time ./hdp --verbose --max_iter 1000 --max_time -1 --train_data sampleData/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka.documents --directory train_dir/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+=======================================================================================================================================================================
+[4/16, 2015](PCA9)
+(Sound)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allSound_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allPIR_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allPIR_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + PIR)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + PIR + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_allLight_allLight_alpha1_10clusters_20140901to20150131_PCAdimension9_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+=======================================================================================================================================================================
+[4/20, 2015](noPCA)
+(Sound)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allSound_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allPIR_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allPIR_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + PIR)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + PIR + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimensionNO_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+=======================================================================================================================================================================
+[4/25, 2015](PCA18)
+(Sound)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allSound_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allPIR_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allPIR_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + PIR)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allSound_allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(PIR + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+(Sound + PIR + Light)
+time ./hdp --verbose --max_iter 100 --max_time -1 --train_data sampleData/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka.documents --directory train_dir/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension18_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+
+================================================================================================================
+[file document]
+/home/hans/crp/src/hdp/hdp-faster/train_dir/allSound_allPIR_allLight_alpha1_10clusters_20140901to20150131_PCAdimension3_5minOverlap_weka_HDPfastResult_iter1000_timeNone
+is
+SPL_20140901to20150131_HDPtopicProportion.dat
